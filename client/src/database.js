@@ -1,19 +1,18 @@
-const DOMAIN = "http://localhost:5000";
+import axios from "axios";
 
+const DOMAIN = "http://localhost:5000";
 /**
- * 
+ *
  * @param url
  * @returns {Promise<*>}
  */
 export const get = async (url) => {
-    let json
-    try {
-        const response = await fetch(DOMAIN + url);
-        json = await response.json();
-        
-    } catch (error) {
-        console.log("error", error);
-    }
+    const response = await axios.get(DOMAIN + url);
+    return await response.data;
 
-    return json;
+};
+
+export const post = async (url, data) => {
+    const response = await axios.post(DOMAIN + url, data);
+    return await response.data;
 };

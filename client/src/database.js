@@ -16,3 +16,9 @@ export const post = async (url, data) => {
     const response = await axios.post(DOMAIN + url, data);
     return await response.data;
 };
+
+
+export const destroy = async (url, data) => {
+    const response = await axios.delete(DOMAIN + url, data);
+    return await response.data;
+};

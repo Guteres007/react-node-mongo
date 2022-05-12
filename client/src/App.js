@@ -1,12 +1,13 @@
-import {useEffect, useReducer, useState} from 'react';
+import {useEffect, useState} from 'react';
 import './App.css';
-import {get, post} from "./database";
+import {destroy, get, post} from "./database";
 import Post from './components/post'
+import ThemeButton from './components/themeButton'
 
 
 function App() {
     const [posts, setPosts] = useState([])
-    const [formData, setFormData] = useState({})
+    const [formData, setFormData] = useState({title: '', description: ''})
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,7 +21,7 @@ function App() {
         e.preventDefault()
         let response = await post('/post/save', formData)
         setPosts(response)
-        setFormData({})
+        setFormData({title: '', description: ''})
     }
 
     const handleChange = event => {
@@ -29,24 +30,32 @@ function App() {
             [event.target.name]: event.target.value
         })
     }
+    const handleDelete = async (id) => {
+        const response = await destroy('/post/delete', id)
+        setPosts(response)
+    }
+    
     return (
         <div className="App">
 
             <div>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder={'title'} onChange={handleChange} name={'title'}/>
-                    <input type="text" placeholder={'description'} onChange={handleChange} name={'description'}/>
+                    <input type="text" placeholder={'title'} onChange={handleChange} value={formData.title} name={'title'}/>
+                    <input type="text" placeholder={'description'} onChange={handleChange} value={formData.description} name={'description'}/>
                     <button type={"submit"}>Odeslat</button>
                 </form>
             </div>
+
+            <ThemeButton/>
+            <br/>
             <div>
                 {
                     posts.map((post, i) => {
-                        return (<Post key={i} post={post}/>)
+                        return (<Post key={i} post={post} removePost={handleDelete}/>)
                     })
                 }
             </div>
-
+            
         </div>
     );
 }

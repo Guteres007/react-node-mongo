@@ -23,6 +23,17 @@ app.post('/post/save', async function (req, res) {
     let posts = await Post.find({})
     res.json(posts)
 })
-app.listen(PORT, async (err) => {
 
+
+app.delete('/post/delete', async function (req, res) {
+    const {id} = req.body
+    await Post.deleteOne({id})
+    let posts = await Post.find({})
+    res.json(posts)
+})
+
+app.listen(PORT, async (err) => {
+    if (err) {
+        console.log(err)
+    }
 })

@@ -1,10 +1,13 @@
-function handleClick(e, id) {
-    e.preventDefault();
-    console.log(id);
-}
 
 
-export default function Post({post}) {
+
+export default function Post({post, removePost}) {
+    
+    function handleClick(e, id) {
+        e.preventDefault();
+        removePost(id)
+    }
+    
     const {title, description, _id} = post
     return (
         <div onClick={(e) => handleClick(e, _id)} style={{border: '1px solid blue', backgroundColor: 'red',}}>

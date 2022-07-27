@@ -1,5 +1,5 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
-exports.db = async () => {
-    await mongoose.connect('mongodb://localhost:27017/react');
+export async function db() {
+  await mongoose.connect("mongodb://localhost:27017/react");
 }

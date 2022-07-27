@@ -13,7 +13,7 @@ db();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(postRoutes);
-app.use("/category", categoryRoutes);
+app.use("/categories", categoryRoutes);
 
 app.listen(PORT, async (err) => {
   if (err) {

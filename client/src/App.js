@@ -2,22 +2,27 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Api from "./database";
 import Post from "./components/post";
-import ThemeButton from "./components/themeButton";
+import ThemeButton from "./components/theme-button";
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({ title: "", description: "" });
 
   useEffect(() => {
     const fetchData = async () => {
-      let response = await Api.get("/posts");
-      setPosts(response);
+      let posts = await Api.get("/posts");
+      setPosts(posts);
+      let categories = await Api.get("/categories");
+      setCategories(categories);
+      console.log(categories);
     };
     fetchData();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    //console.log(formData);
     let response = await Api.post("/post/save", formData);
     setPosts(response);
     setFormData({ title: "", description: "" });
@@ -30,7 +35,7 @@ function App() {
     });
   };
   const handleDelete = async (id) => {
-    const response = await Api.destroy("/post/delete", id);
+    const response = await Api.delete("/post/delete", id);
     setPosts(response);
   };
 
@@ -52,6 +57,17 @@ function App() {
             value={formData.description}
             name={"description"}
           />
+
+          <select onChange={handleChange} name={"category_id"}>
+            {categories.map((category, index) => {
+              return (
+                <option key={index} value={category._id}>
+                  {category.name}
+                </option>
+              );
+            })}
+          </select>
+
           <button type={"submit"}>Odeslat</button>
         </form>
       </div>

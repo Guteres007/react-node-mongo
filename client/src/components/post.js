@@ -13,7 +13,7 @@ export default function Post({ post, removePost }) {
       <div>{title}</div>
       <div>{description}</div>
 
-      <div>Category: {category.name} </div>
+      <div>Category: {category?.name} </div>
     </div>
   );
 }

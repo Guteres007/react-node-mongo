@@ -13,7 +13,7 @@ const Api = {
     return await response.data;
   },
 
-  destroy: async (url, data) => {
+  delete: async (url, data) => {
     const response = await axios.delete(DOMAIN + url, data);
     return await response.data;
   },

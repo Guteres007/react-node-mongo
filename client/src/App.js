@@ -23,7 +23,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     //console.log(formData);
-    let response = await Api.post("/post/save", formData);
+    let response = await Api.post("/posts/save", formData);
     setPosts(response);
     setFormData({ title: "", description: "" });
   };
@@ -35,7 +35,7 @@ function App() {
     });
   };
   const handleDelete = async (id) => {
-    const response = await Api.delete("/post/delete", id);
+    const response = await Api.delete("/posts/delete", id);
     setPosts(response);
   };
 

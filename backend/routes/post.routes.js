@@ -3,11 +3,10 @@ import PostController from "./../controllers/post.controller.js";
 
 const router = express.Router();
 
-router.get("/posts", PostController.index);
+router.get("/", PostController.index);
 
-router.post("/post/save", PostController.create);
+router.post("/save", PostController.create);
 
-//TODO: udělat lepší importy
-router.delete("/post/delete", PostController.delete);
+router.delete("/delete", PostController.delete);
 
 export default router;

@@ -18,18 +18,21 @@ const AuthController = {
   },
   login: async function (req, res, next) {
     const user = await User.findOne({ email: req.body.email });
-    let isMatchedPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const { password, ...userData } = user._doc;
+    if (!user) {
+      return next(createError(400, "User not found"));
+    }
+    let isMatchedPassword = await bcrypt.compare(req.body.password, password);
     if (!isMatchedPassword) {
-      next(createError(400, "Něco se pokazilo při vytváření Uživatele"));
+      next(createError(401, "Špatné údaje"));
     } else {
       let accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY);
-      res.status(200).json({
-        username: user.name,
-        accessToken,
-      });
+      res
+        .cookie("access-token", accessToken, { httpOnly: true })
+        .status(200)
+        .json({
+          ...userData,
+        });
     }
   },
 };

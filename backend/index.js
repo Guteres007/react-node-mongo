@@ -9,9 +9,11 @@ import bodyParser from "body-parser";
 import categoryRoutes from "./routes/category.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
 
 db();
 app.use(cors());
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);

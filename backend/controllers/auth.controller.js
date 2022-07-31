@@ -26,9 +26,11 @@ const AuthController = {
     if (!isMatchedPassword) {
       next(createError(401, "Špatné údaje"));
     } else {
-      let accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY);
+      let accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+        expiresIn: "10s",
+      });
       res
-        .cookie("access-token", accessToken, { httpOnly: true })
+        .cookie("access_token", accessToken, { httpOnly: true })
         .status(200)
         .json({
           ...userData,

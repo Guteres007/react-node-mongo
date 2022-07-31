@@ -5,17 +5,21 @@ import "dotenv/config";
 const PORT = process.env.PORT || 5000;
 import { db } from "./utils/database.js";
 import bodyParser from "body-parser";
+import consola from "consola";
 
 import categoryRoutes from "./routes/category.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
+import { verifyToken } from "./utils/verify-token.js";
 
 db();
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
+
 app.use("/auth", authRoutes);
+app.use(verifyToken); // token pro celou aplikaci
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
 
@@ -30,8 +34,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, async (err) => {
+app.listen(PORT, (err) => {
   if (err) {
-    console.log(err);
+    consola.error(err);
   }
+  consola.success({ badge: true, message: `Server listening on port ${PORT}` });
 });

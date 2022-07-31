@@ -27,7 +27,7 @@ const AuthController = {
       next(createError(401, "Špatné údaje"));
     } else {
       let accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-        expiresIn: "10s",
+        expiresIn: "1d",
       });
       res
         .cookie("access_token", accessToken, { httpOnly: true })

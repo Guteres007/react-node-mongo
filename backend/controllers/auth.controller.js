@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import User from "./../models/user.model.js";
-import jwt from "jsonwebtoken";
 
 const AuthController = {
   signup: async function (req, res, next) {
@@ -26,16 +25,16 @@ const AuthController = {
     if (!isMatchedPassword) {
       next(createError(401, "Špatné údaje"));
     } else {
-      let accessToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-        expiresIn: "1d",
+      //vytvořím session
+      req.session.user = user;
+      res.status(200).json({
+        ...userData,
       });
-      res
-        .cookie("access_token", accessToken, { httpOnly: true })
-        .status(200)
-        .json({
-          ...userData,
-        });
     }
+  },
+  destroy: async function (req, res, next) {
+    req.session.destroy();
+    res.status(200).json("Ok");
   },
 };
 

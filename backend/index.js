@@ -12,16 +12,23 @@ import postRoutes from "./routes/post.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import { verifyToken } from "./middlewares/verify-token.js";
-import { auth } from "./middlewares/auth.js";
+import session from "express-session";
 
 db();
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
 app.use("/auth", authRoutes);
 app.use(verifyToken); // token pro celou aplikaci
-app.use(auth); //
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
 

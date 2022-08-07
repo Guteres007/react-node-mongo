@@ -13,6 +13,7 @@ import authRoutes from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import { configJWTStrategy } from "./middlewares/jwt-token-middleware.js";
 import passport from "passport";
+import errorMiddleware from "./middlewares/error-middleware.js";
 
 db();
 app.use(cors());
@@ -20,23 +21,14 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use("/auth", authRoutes);
+//nastavení JWT tokenu
 configJWTStrategy();
+//nastavení authorizace pro routy
+app.use(passport.authenticate("jwt", { session: false }));
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
-app.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
-  res.json("skrytý obsah :D");
-});
-
 //handle chyb z rout
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || "Něco se pokazilo";
-  res.status(status).json({
-    success: false,
-    status,
-    message,
-  });
-});
+app.use(errorMiddleware);
 
 app.listen(PORT, (err) => {
   if (err) {

@@ -11,26 +11,21 @@ import categoryRoutes from "./routes/category.routes.js";
 import postRoutes from "./routes/post.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
-import { verifyToken } from "./middlewares/verify-token.js";
-import session from "express-session";
+import { configJWTStrategy } from "./middlewares/jwt-token-middleware.js";
+import passport from "passport";
 
 db();
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser.json());
-
-app.use(
-  session({
-    secret: process.env.SECRET_KEY,
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-
+app.use(passport.initialize());
 app.use("/auth", authRoutes);
-app.use(verifyToken); // token pro celou aplikaci
+configJWTStrategy();
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
+app.get("/me", passport.authenticate("jwt", { session: false }), (req, res) => {
+  res.json("skrytý obsah :D");
+});
 
 //handle chyb z rout
 app.use((err, req, res, next) => {

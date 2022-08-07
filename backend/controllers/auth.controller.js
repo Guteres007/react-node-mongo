@@ -1,7 +1,9 @@
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import User from "./../models/user.model.js";
-
+import { Strategy, ExtractJwt } from "passport-jwt";
+import passport from "passport";
+import jwt from "jsonwebtoken";
 const AuthController = {
   signup: async function (req, res, next) {
     try {
@@ -25,15 +27,15 @@ const AuthController = {
     if (!isMatchedPassword) {
       next(createError(401, "Špatné údaje"));
     } else {
-      //vytvořím session
-      req.session.user = user;
+      const token = jwt.sign({ userData }, process.env.JWT_SECRET_KEY, {
+        expiresIn: "1h",
+      });
       res.status(200).json({
-        ...userData,
+        token,
       });
     }
   },
   destroy: async function (req, res, next) {
-    req.session.destroy();
     res.status(200).json("Ok");
   },
 };

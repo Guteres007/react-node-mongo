@@ -4,9 +4,7 @@ import { ThemeContext, THEMES } from "../contexts/theme";
 export default function ThemeButton() {
   const { theme, setTheme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    console.log(theme);
-  }, [theme]);
+  useEffect(() => {}, [theme]);
 
   function changeTheme() {
     setTheme(THEMES.light);
